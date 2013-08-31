@@ -9,6 +9,7 @@ import android.view.View.OnClickListener;
 
 public class MainActivity extends Activity {
 
+    private final MainActivity self = this;
     private WsParserTask<WsParser> mTask;
 
     @Override
@@ -30,6 +31,14 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
                 mTask = new WsParserTask<WsParser>();
                 mTask.execute(new WsParser());
+            }
+        });
+        findViewById(R.id.dialog).setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                SimpleProgressDialog dialog = new SimpleProgressDialog(self);
+                dialog.show();
             }
         });
     }
