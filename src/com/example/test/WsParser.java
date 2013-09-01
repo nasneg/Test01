@@ -16,30 +16,44 @@
 
 package com.example.test;
 
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.xml.SimpleXmlHttpMessageConverter;
+import org.springframework.web.client.RestTemplate;
+
 import android.os.AsyncTask;
-import android.os.SystemClock;
 import android.util.Log;
+
+import com.example.test.entity.Entity;
 
 /**
  *
  */
-public class WsParser {
+public class WsParser<O extends WsDto, E extends Entity<?>> {
     @SuppressWarnings("unused")
     private static final String TAG = "WsParser";
     private final WsParser self = this;
 
-    public <T extends AsyncTask<?, ?, ?>> int execute(T task) {
-        int count = 0;
-        for (int i = 0; i < 100; i++) {
-            // キャンセルされたら抜ける
-            if (task.isCancelled()) {
-                return 0;
-            }
+    private AsyncTask<?, ?, ?> mTask;
 
-            SystemClock.sleep(100);
-            count++;
-            Log.d("hashizume", "count:" + count);
+    public E parse(O dto) {
+        RestTemplate template = new RestTemplate();
+        template.getMessageConverters().add(new SimpleXmlHttpMessageConverter());
+        String url = "http://tyo.to/wp-content/themes/tyo.to/test.xml";
+        try {
+            ResponseEntity<BookXml> responseEntity = template.exchange(url, HttpMethod.GET, null,
+                    BookXml.class);
+            BookXml res = responseEntity.getBody();
+            Log.d("hashizume", res.toString());
+        } catch (Exception e) {
+            Log.d("hashizume", e.toString());
+            return null;
         }
-        return count;
+        return null;
+    }
+
+    public E execute(AsyncTask<?, ?, ?> task, O dto) {
+        mTask = task;
+        return parse(dto);
     }
 }

@@ -14,28 +14,16 @@
  * limitations under the License.
  */
 
-package com.example.test;
-
-import android.os.AsyncTask;
-
-import com.example.test.entity.Entity;
+package com.example.test.entity;
 
 /**
  *
  */
-public class WsParserTask<O extends WsDto, E extends Entity<?>> extends AsyncTask<O, Void, E> {
+public class TestResult extends Result {
     @SuppressWarnings("unused")
-    private static final String TAG = "WsParserTask";
-    private final WsParserTask self = this;
+    private static final String TAG = "TestResult";
+    private final TestResult self = this;
 
-    private WsParser<O, E> mParser;
-
-    public <P extends WsParser<O, E>> WsParserTask(P parser) {
-        mParser = parser;
-    }
-
-    @Override
-    protected E doInBackground(O... params) {
-        return mParser.execute(this, params[0]);
-    }
+    public String first_name;
+    public String last_name;
 }

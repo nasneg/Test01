@@ -16,26 +16,29 @@
 
 package com.example.test;
 
-import android.os.AsyncTask;
-
-import com.example.test.entity.Entity;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
 
 /**
  *
  */
-public class WsParserTask<O extends WsDto, E extends Entity<?>> extends AsyncTask<O, Void, E> {
+@Root(strict = false)
+public class BookXml {
     @SuppressWarnings("unused")
-    private static final String TAG = "WsParserTask";
-    private final WsParserTask self = this;
+    private static final String TAG = "BookXml";
+    private final BookXml self = this;
 
-    private WsParser<O, E> mParser;
+    @Element
+    public String author;
 
-    public <P extends WsParser<O, E>> WsParserTask(P parser) {
-        mParser = parser;
-    }
+    @Element
+    public String title;
+
+    @Element
+    public String price;
 
     @Override
-    protected E doInBackground(O... params) {
-        return mParser.execute(this, params[0]);
+    public String toString() {
+        return "author:" + author + "\ntitle:" + title + "\nprice:" + price + "\n";
     }
 }

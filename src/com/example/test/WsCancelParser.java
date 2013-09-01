@@ -17,25 +17,29 @@
 package com.example.test;
 
 import android.os.AsyncTask;
-
-import com.example.test.entity.Entity;
+import android.os.SystemClock;
+import android.util.Log;
 
 /**
  *
  */
-public class WsParserTask<O extends WsDto, E extends Entity<?>> extends AsyncTask<O, Void, E> {
+public class WsCancelParser {
     @SuppressWarnings("unused")
-    private static final String TAG = "WsParserTask";
-    private final WsParserTask self = this;
+    private static final String TAG = "WsParser";
+    private final WsCancelParser self = this;
 
-    private WsParser<O, E> mParser;
+    public <T extends AsyncTask<?, ?, ?>> int execute(T task) {
+        int count = 0;
+        for (int i = 0; i < 100; i++) {
+            // キャンセルされたら抜ける
+            if (task.isCancelled()) {
+                return 0;
+            }
 
-    public <P extends WsParser<O, E>> WsParserTask(P parser) {
-        mParser = parser;
-    }
-
-    @Override
-    protected E doInBackground(O... params) {
-        return mParser.execute(this, params[0]);
+            SystemClock.sleep(100);
+            count++;
+            Log.d("hashizume", "count:" + count);
+        }
+        return count;
     }
 }

@@ -7,10 +7,13 @@ import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 
+import com.example.test.entity.Entity;
+import com.example.test.entity.TestResult;
+
 public class MainActivity extends Activity {
 
     private final MainActivity self = this;
-    private WsParserTask<WsParser> mTask;
+    private WsCancelParserTask<WsCancelParser> mTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +32,8 @@ public class MainActivity extends Activity {
 
             @Override
             public void onClick(View v) {
-                mTask = new WsParserTask<WsParser>();
-                mTask.execute(new WsParser());
+                mTask = new WsCancelParserTask<WsCancelParser>();
+                mTask.execute(new WsCancelParser());
             }
         });
         findViewById(R.id.dialog).setOnClickListener(new OnClickListener() {
@@ -39,6 +42,14 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
                 SimpleProgressDialog dialog = new SimpleProgressDialog(self);
                 dialog.show();
+            }
+        });
+        findViewById(R.id.xml).setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                new WsParserTask<WsDto, Entity<TestResult>>(
+                        new WsParser<WsDto, Entity<TestResult>>()).execute(new WsDto());
             }
         });
     }

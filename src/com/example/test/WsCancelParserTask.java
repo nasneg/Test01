@@ -17,25 +17,33 @@
 package com.example.test;
 
 import android.os.AsyncTask;
-
-import com.example.test.entity.Entity;
+import android.util.Log;
 
 /**
  *
  */
-public class WsParserTask<O extends WsDto, E extends Entity<?>> extends AsyncTask<O, Void, E> {
+public class WsCancelParserTask<P extends WsCancelParser> extends AsyncTask<P, Void, Integer> {
     @SuppressWarnings("unused")
     private static final String TAG = "WsParserTask";
-    private final WsParserTask self = this;
+    private final WsCancelParserTask self = this;
 
-    private WsParser<O, E> mParser;
+    @Override
+    protected void onCancelled() {
 
-    public <P extends WsParser<O, E>> WsParserTask(P parser) {
-        mParser = parser;
     }
 
     @Override
-    protected E doInBackground(O... params) {
-        return mParser.execute(this, params[0]);
+    protected void onPostExecute(Integer result) {
+
+    }
+
+    @Override
+    protected Integer doInBackground(P... params) {
+        try {
+            return params[0].execute(this);
+        } finally {
+            Log.d("hashizume", "doInBackground end");
+        }
+
     }
 }
